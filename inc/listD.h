@@ -35,9 +35,11 @@ public:
 	
 	void iterate ();
 	void increment ();
+	void startCurF ();
 	Item * next ();
 	uint16_t & getCount ();
 	void removeCurrItem (); 
+	void removeHead ();
 
 };
 

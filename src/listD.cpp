@@ -7,7 +7,10 @@ List::Item::Item (void (*f)(), uint16_t c, Item * n,  Item * p)
 
 void List::Item::decrCounter ()
 {
-	counter--;
+	if (counter==0)
+		counter = 0;
+	else
+		counter--;
 }
 
 uint16_t & List::Item::getCounter ()
@@ -102,6 +105,11 @@ void List::increment ()
 	}
 }
 
+void List::startCurF ()
+{
+	current->getPtrF();
+}
+
 uint16_t & List::getCount ()
 {
 	return count;
@@ -111,7 +119,26 @@ void List::removeCurrItem ()
 {
 	current->prev->next = current->next;
 	delete current;
+	--count;
 	current = current->next;
+}
 
+void List::removeHead ()
+{
+
+	Item * cur= head->next;
+	delete head;
+	--count;	
+	head = nullptr;
+	if (getCount()==0)
+	{	
+		tail->prev = head;
+		head->next = tail;
+	}
+	else
+	{
+		cur->prev = head;
+		head->next = cur;
+	}
 }
 
