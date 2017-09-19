@@ -2,12 +2,11 @@
 
 Dispatcher::Dispatcher ()
 {
-	
 }
 
 void Dispatcher::addTask (void (*f)(), uint16_t c)
 {
-	tasks.addFirst (f, c);
+	tasks.addLast (f, c);
 }
 
 void Dispatcher::tickTask ()
@@ -18,23 +17,27 @@ void Dispatcher::tickTask ()
 void Dispatcher::checkTasks ()
 {
 	tasks.current = tasks.head;
-	for (uint8_t i=0, c=tasks.getCount() ;i<c; ++i)
+	while (tasks.current != nullptr)
 	{
 		if (tasks.current->getCounter()==0)
 			{
 				queue.addLast (tasks.current->getPtrF(), tasks.current->getSet());
-				tasks.removeCurrItem();
+				tasks.removeItem(tasks.current);
+			}
+			else
+			{
+				tasks.current = tasks.current->next;
 			}
 	}
 }
 
 void Dispatcher::checkQueue ()
 {
-	if (queue.getCount())
+	while (queue.getCount())
 	{
-		queue.head->getPtrF();
+		queue.head->ptrF();
 		tasks.addLast(queue.head->getPtrF(), queue.head->getSet());
-		queue.removeHead ();
+		queue.removeItem (queue.head);
 	}
 }
 	

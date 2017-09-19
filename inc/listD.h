@@ -12,7 +12,7 @@ class Item
 	Item * next;
 	Item * prev;
 	uint16_t counter, set;
-	Item (void (*f)(), uint16_t c, Item * n = nullptr,  Item * p = nullptr);
+	Item (void (*f)(), uint16_t c, Item * n = nullptr, Item * p = nullptr);
 	void decrCounter ();
 	uint16_t & getCounter ();
 	uint16_t & getSet ();
@@ -36,9 +36,11 @@ public:
 	void iterate ();
 	void increment ();
 	void startCurF ();
+	void startItem (Item *);
 	Item * next ();
 	uint16_t & getCount ();
 	void removeCurrItem (); 
+	void removeItem (Item *); 
 	void removeHead ();
 
 };

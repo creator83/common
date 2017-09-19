@@ -1,7 +1,6 @@
 #include "device.h"
 #include "listD.h"
 
-
 #ifndef DISPATCHER_H
 #define DISPATCHER_H
 

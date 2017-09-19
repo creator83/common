@@ -1,7 +1,7 @@
 #include "listD.h"
 
-List::Item::Item (void (*f)(), uint16_t c, Item * n,  Item * p)
-	:ptrF(f), next(n), prev(p), counter(c), set(c)
+List::Item::Item (void (*f)(), uint16_t c, Item * n, Item * p)
+	:ptrF(f), next(n), prev (p), counter(c), set(c)
 {
 }
 
@@ -48,8 +48,6 @@ List::~List()
 	delete current;
 }
 
-
-
 void List::addFirst (void (*f)(), uint16_t c)
 {
 	Item * newItem = new Item (f, c, head);
@@ -64,20 +62,14 @@ void List::addFirst (void (*f)(), uint16_t c)
 void List::addLast (void (*f)(), uint16_t c)
 {
 	Item * newItem = new Item (f, c);
-	if (tail == nullptr && head == nullptr)
+	if (head == nullptr)
 	{
 		head = newItem;
-		head->next = tail;
-	}
-	else if (tail == nullptr)
-	{
-		tail = newItem;
-		tail->prev = head;
 	}
 	else
 	{
 		tail->next = newItem;
-		tail->next->prev = tail; 
+		newItem->prev = tail;
 	}
 	tail = newItem;
 	++count;
@@ -110,6 +102,11 @@ void List::startCurF ()
 	current->getPtrF();
 }
 
+void List::startItem (Item *i)
+{
+	i->ptrF();
+}
+
 uint16_t & List::getCount ()
 {
 	return count;
@@ -117,20 +114,58 @@ uint16_t & List::getCount ()
 
 void List::removeCurrItem ()
 {
-	current->prev->next = current->next;
-	delete current;
+	if (current==head)
+	{
+		removeHead();
+	}
+	else{
+		current->prev->next = current->next;
+		delete current;
+		
+	}
 	--count;
 	current = current->next;
 }
 
+void List::removeItem (Item *i)
+{
+	if (getCount()==1)
+	{
+		head = tail = nullptr;
+	}
+	else
+	{
+		if (i == head)
+		{
+			head = head->next;
+			current = head;
+		}
+		else if (i == tail)
+		{
+			tail = tail->prev;
+			current = tail;
+			tail->next = nullptr;
+		}
+		else
+		{
+			i->prev->next = i->next;
+			i->next->prev = i->prev;	
+			current = i->next;
+		}
+			
+	}
+	
+	delete i;
+	--count;
+}
+
 void List::removeHead ()
 {
-
 	Item * cur= head->next;
 	delete head;
 	--count;	
 	head = nullptr;
-	if (getCount()==0)
+	if (getCount()==0)//if one element
 	{	
 		tail->prev = head;
 		head->next = tail;
